@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// AJAX HANDLER - MUST BE AT THE VERY TOP (before any HTML)
-// ============================================================
+
 if (isset($_GET['action']) && $_GET['action'] === 'next_regno') {
     require_once 'config/database.php';
     header('Content-Type: application/json');
@@ -29,13 +27,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'next_regno') {
     }
     exit;
 }
-// ============================================================
+
 $pageTitle  = 'Add Student';
 $activePage = 'add-student';
 require_once 'includes/header.php';
 require_once 'includes/sidebar.php';
 
-// All active courses
+
 $courses = $pdo->query("
     SELECT id, course_code, course_name
     FROM courses
@@ -43,7 +41,7 @@ $courses = $pdo->query("
     ORDER BY course_name
 ")->fetchAll();
 
-// All active/upcoming batches
+
 $batches = $pdo->query("
     SELECT b.id, b.batch_code, b.batch_name, b.course_fee, b.course_id, b.status,
            b.total_installments, b.installment_amount,
@@ -56,9 +54,7 @@ $batches = $pdo->query("
 
 $success = $error = '';
 
-/**
- * Generates a guaranteed-unique register number
- */
+
 function generateUniqueRegNo(PDO $pdo, $year) {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM students WHERE register_no LIKE ? FOR UPDATE");
     $stmt->execute(['SC-' . $year . '-%']);
@@ -73,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $attempt = 0;
     $inserted = false;
 
-    // true only when "Pay Now" button was clicked
+   
     $doPayNow = isset($_POST['pay_now']);
 
     while (!$inserted && $attempt < $maxRetries) {
@@ -83,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $register_no = generateUniqueRegNo($pdo, $year);
 
-            // Always save the selected payment_option on the student (even if not paying now)
+           
             $paymentOption = !empty($_POST['payment_option']) ? $_POST['payment_option'] : null;
 
             $stmt = $pdo->prepare("
@@ -101,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_POST['gender'] ?: null,
                 $_POST['nic'] ?: null,
                 $_POST['batch_id'] ?: null,
-                $paymentOption,                          // ← payment method always saved here
+                $paymentOption,                          
                 $_POST['username'] ?: null,
                 $_POST['password_plain'] ?: null,
                 isset($_POST['access_given']) ? 1 : 0,
@@ -113,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $studentId = $pdo->lastInsertId();
 
-            // Registration fee (optional)
+            
             if (!empty($_POST['reg_fee_amount'])) {
                 $stmt = $pdo->prepare("INSERT INTO registration_fees (student_id, amount, bank, ref_no, payment_date, slip_marked_by) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([
@@ -126,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
 
-            // ========== ACTUAL PAYMENT – only when Pay Now clicked ==========
+            
             if ($doPayNow && !empty($_POST['inst_amount']) && !empty($paymentOption)) {
                 $installmentNo = null;
 
@@ -241,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="address" class="form-control">
             </div>
 
-            <!-- COURSE SELECT -->
+            
             <div class="col-md-4">
                 <label class="form-label">Course *</label>
                 <select id="course_id" class="form-select" required>
@@ -254,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </select>
             </div>
 
-            <!-- BATCH SELECT -->
+            
             <div class="col-md-4">
                 <label class="form-label">Batch *</label>
                 <select name="batch_id" id="batch_id" class="form-select" required>
@@ -369,12 +365,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="card-footer bg-white d-flex gap-2 flex-wrap">
-        <!-- Save only student + payment option (NO money payment) -->
+        
         <button type="submit" name="save_only" value="1" class="btn btn-primary">
             <i class="bi bi-save"></i> Save Student
         </button>
 
-        <!-- Calculate amount + save student + create paid payment -->
+        
         <button type="submit" name="pay_now" value="1" id="payNowBtn" class="btn btn-success">
             <i class="bi bi-cash-coin"></i> Pay Now
         </button>
@@ -421,7 +417,7 @@ function updateInstallmentOptions(batchId) {
     }
 }
 
-// Amount ONLY calculated when Pay Now is clicked (not on option change)
+
 function calculateAmount() {
     const batchId = batchSelect.value;
     const option  = paymentOption.value;
@@ -459,14 +455,14 @@ function toggleInstallmentFields() {
         installmentWrapper.style.display = 'none';
         installmentNo.value = '';
     }
-    // IMPORTANT: do NOT auto-fill amount here
+   
     instAmount.value = '';
     instAmount.placeholder = 'Pay Now click කරන්න';
 }
 
 paymentOption.addEventListener('change', toggleInstallmentFields);
 
-// Pay Now button → first calculate amount, then allow form submit
+
 payNowBtn.addEventListener('click', function (e) {
     if (!paymentOption.value) {
         e.preventDefault();
@@ -490,7 +486,7 @@ payNowBtn.addEventListener('click', function (e) {
         alert('Could not calculate amount. Check Course Fee / Installment Amount of the batch.');
         return;
     }
-    // amount is filled → form will submit normally with name="pay_now"
+    
 });
 
 courseSelect.addEventListener('change', function () {
@@ -524,7 +520,7 @@ batchSelect.addEventListener('change', function () {
     const batchId = this.value;
     registerNo.value = '';
     updateInstallmentOptions(batchId);
-    instAmount.value = '';   // clear amount when batch changes
+    instAmount.value = '';   
 
     if (!batchId) return;
 

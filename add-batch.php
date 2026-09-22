@@ -6,7 +6,7 @@ require_once 'includes/sidebar.php';
 
 $success = $error = '';
 
-// Active courses load karanna (course_fee eka pahatath ganna)
+
 $allCourses = $pdo->query("
     SELECT id, course_code, course_name, course_fee 
     FROM courses 
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
-            (int)$_POST['course_id'],          // ← NEW
+            (int)$_POST['course_id'],          
             $_POST['batch_code'],
             $_POST['batch_name'],
             $_POST['start_date'] ?: null,
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="card-body">
         <div class="row g-3">
 
-            <!-- ========== COURSE SELECT (NEW) ========== -->
+            
             <div class="col-md-4">
                 <label class="form-label">Course *</label>
                 <select name="course_id" id="courseSelect" class="form-select" required>
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endforeach; ?>
                 </select>
             </div>
-            <!-- ======================================== -->
+            
 
             <div class="col-md-4">
                 <label class="form-label">Batch Code *</label>
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const perInstallment = fee / count;
             installmentAmount.value = perInstallment.toFixed(2);
 
-            // fee eka installments walata clean widihata bedila nathnam (round number nathnam) hint ekak pennanawa
+           
             const total = perInstallment * count;
             if (Math.abs(total - fee) > 0.01) {
                 installmentHint.textContent =
@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Course select karama fee eka auto-fill karanawa, ithin installment ekath recalculate karanawa
+
     courseSelect.addEventListener('change', function () {
         const selectedOption = this.options[this.selectedIndex];
         const fee = selectedOption.getAttribute('data-fee');
@@ -162,10 +162,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         calculateInstallment();
     });
 
-    // Course Fee eka manually wenas karama installment eka recalculate karanawa
+    
     courseFee.addEventListener('input', calculateInstallment);
 
-    // Total Installments eka wenas karama installment eka recalculate karanawa
+    
     totalInstallments.addEventListener('input', calculateInstallment);
 })();
 </script>
