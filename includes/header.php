@@ -9,23 +9,20 @@ require_once __DIR__ . '/../config/database.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $pageTitle ?? 'Dashboard' ?> - <?= APP_NAME ?></title>
 
-    <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <!-- DataTables -->
+   
     <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-    <!-- Google Fonts -->
+   
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
-    <!-- Custom CSS -->
+    
     <link href="<?= APP_URL ?>/assets/css/style.css" rel="stylesheet">
 
     <style>
-    /* =========================================================
-       GLOBAL LAYOUT + SIDEBAR + TOPBAR  (Premium Style)
-       ========================================================= */
+   
     :root {
         --sidebar-width: 260px;
         --sidebar-bg: #0f172a;
@@ -61,9 +58,6 @@ require_once __DIR__ . '/../config/database.php';
         min-height: 100vh;
     }
 
-    /* ---------- SIDEBAR ----------
-       Defined ONCE, fixed from the very first paint so there's
-       no layout jump / reflow after load. */
     .sidebar {
         position: fixed;
         top: 0;
@@ -81,7 +75,7 @@ require_once __DIR__ . '/../config/database.php';
         z-index: 1000;
     }
 
-    /* Custom scrollbar styling for sidebar */
+   
     .sidebar::-webkit-scrollbar {
         width: 6px;
     }
@@ -201,9 +195,7 @@ require_once __DIR__ . '/../config/database.php';
         opacity: 1;
     }
 
-    /* ---------- PAGE CONTENT WRAPPER ----------
-       Pushed right by sidebar width so it never sits under
-       the fixed sidebar, from the very first paint. */
+   
     #page-content-wrapper {
         flex: 1;
         display: flex;
@@ -214,7 +206,7 @@ require_once __DIR__ . '/../config/database.php';
         transition: margin-left .3s ease;
     }
 
-    /* ---------- TOP NAVBAR ---------- */
+    
     .top-navbar {
         background: rgba(255,255,255,.85);
         backdrop-filter: blur(12px);
@@ -341,16 +333,14 @@ require_once __DIR__ . '/../config/database.php';
         color: #e11d48 !important;
     }
 
-    /* ---------- MAIN CONTENT ---------- */
+  
     .main-content {
         padding: 1.5rem 1.75rem 2.5rem;
         flex: 1;
         overflow-y: auto;
     }
 
-    /* ---------- TOGGLED (collapsed) STATE ----------
-       On desktop, "toggled" slides the sidebar off-screen and
-       removes the content's left margin. */
+    
     #wrapper.toggled .sidebar {
         transform: translateX(calc(-1 * var(--sidebar-width)));
     }
@@ -359,7 +349,7 @@ require_once __DIR__ . '/../config/database.php';
         margin-left: 0;
     }
 
-    /* ---------- RESPONSIVE ---------- */
+  
     @media (max-width: 991.98px) {
         .sidebar {
             transform: translateX(-100%);
@@ -369,7 +359,7 @@ require_once __DIR__ . '/../config/database.php';
             margin-left: 0;
         }
 
-        /* On mobile, "toggled" means the sidebar is OPEN (opposite of desktop) */
+        
         #wrapper.toggled .sidebar {
             transform: translateX(0);
         }
